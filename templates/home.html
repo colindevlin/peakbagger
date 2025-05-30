@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="peak_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Select a Peak List
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="peak_dropdown">
+            {% for peak in all_peaks %}
+            <li>{{ peak.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+{% endblock %}
