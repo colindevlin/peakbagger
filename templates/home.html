@@ -6,17 +6,19 @@
 
 {% block content %}
 <div class="container mt-2">
-    <div class="dropdown">
+    <div class="dropdown m-2">
         <button class="btn btn-primary dropdown-toggle" type="button" id="peak_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
             Select a Peak List
         </button>
         <ul class="dropdown-menu" aria-labelledby="peak_dropdown">
-            {% for peak in all_peaks %}
-            <li>{{ peak.name }}</li>
+            {% for peak_list in all_peaks_lists %}
+            <a class="dropdown-item" href="{{ url_for('list_view', list_id=peak_list.id) }}">{{ peak_list.name }}</a>
             {% endfor %}
         </ul>
     </div>
+    <div class="m-2">
+        <a class="btn btn-secondary" href="">Manage your peak list</a>
+    </div>
 </div>
-
 
 {% endblock %}

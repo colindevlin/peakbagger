@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+    {{ peak_list.name }}:
+    <ul>
+        {% for peak in peak_list.peaks %}
+        <li>
+            <div class="btn-group btn-group-sm" role="group" aria-label="">
+                <input type="checkbox" class="btn-check" id="peak_done" autocomplete="off">
+                <label class="btn btn-outline-primary mx-2" for="peak_done">Mark complete</label>
+                {{ peak.name }}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="container">
+    <a class="btn btn-primary" href="/"> Return </a>
+</div>
+{% endblock %}
