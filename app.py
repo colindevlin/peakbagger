@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, flash, get_flashed_messages
+from flask import Flask, render_template, session, redirect, url_for, flash, get_flashed_messages, request
 from models import Peak, PeakList, db_session, User
 import datetime
 
@@ -11,6 +11,13 @@ def get_current_user():
         return db_session.query(User).get(user_id)
     return None
 
+@app.context_processor
+def inject_user():
+    user = None
+    if 'user_id' in session:
+        user = db_session.query(User).get(session['user_id'])
+    return dict(user=user)
+
 @app.route('/')
 def index():
     all_peaks_lists = db_session.query(PeakList).all()
@@ -18,17 +25,43 @@ def index():
 
 @app.route('/list/<int:list_id>')
 def list_view(list_id):
+    all_peaks_lists = db_session.query(PeakList).all()
     peak_list = db_session.query(PeakList).get(list_id)
-    return render_template('list_view.html', peak_list=peak_list)
+    print([peak.name for peak in peak_list.peaks])
+    return render_template('list_view.html', peak_list=peak_list, all_peaks_lists=all_peaks_lists)
 
-@app.route('/manage')
+@app.route('/manage', methods=['GET', 'POST'])
 def manage_list():
-    return render_template('manage.html')
+    current_user = get_current_user()
+    if request.method == "GET":
+        if current_user:
+            user_lists = current_user.peak_lists
+            all_peaks_lists = db_session.query(PeakList).all()
+            return render_template('manage.html', user_lists=user_lists, all_peaks_lists=all_peaks_lists)
+        else:
+            flash("Please login to manage your lists.")
+            return redirect('/')
+    elif request.method == "POST":
+        if current_user:
+            user_lists = current_user.peak_lists
+            selected_lists = request.form.getlist('subscribe_list')
+            for peak_list in db_session.query(PeakList).filter(PeakList.id.in_(selected_lists)):
+                if peak_list not in user_lists:
+                    current_user.peak_lists.append(peak_list)
+            for peak_list in user_lists:
+                if str(peak_list.id) not in selected_lists:
+                    current_user.peak_lists.remove(peak_list)
+            db_session.commit()
+            return redirect(url_for('manage_list'))
+        else:
+            flash("Please login to manage your lists.")
+            return redirect('/')
 
-@app.route('/login')
-def login():
-    session['user_id'] = 1
-    flash("Logged in as testuser")
+
+@app.route('/login/<int:user_id>')
+def login(user_id):
+    session['user_id'] = user_id
+    flash("Logged in as {user_id}")
     return redirect(url_for('index'))
 
 @app.route('/logout')

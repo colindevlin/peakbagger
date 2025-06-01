@@ -5,15 +5,27 @@
 
 {% block content %}
 <div class="container mt-2">
+    <div class="dropdown m-2">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="peak_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Select a Peak List
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="peak_dropdown">
+            {% for peak_list in all_peaks_lists %}
+            <li>
+                <a class="dropdown-item" href="{{ url_for('list_view', list_id=peak_list.id) }}">{{ peak_list.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <a class="btn btn-secondary mt-2" href="{{ url_for('manage_list') }}">Manage your peak list</a>
+    </div>
+</div>
+
+<div class="container mt-2">
     {{ peak_list.name }}:
     <ul>
         {% for peak in peak_list.peaks %}
         <li>
-            <div class="btn-group btn-group-sm" role="group" aria-label="">
-                <input type="checkbox" class="btn-check" id="peak_done" autocomplete="off">
-                <label class="btn btn-outline-primary mx-2" for="peak_done">Mark complete</label>
-                {{ peak.name }}
-            </div>
+            {{ peak.name }}
         </li>
         {% endfor %}
     </ul>

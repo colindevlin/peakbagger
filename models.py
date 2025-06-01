@@ -34,7 +34,7 @@ class Peak(Base):
 
     peak_lists = relationship('PeakList', secondary='peak_peaklist_association', back_populates='peaks')
 
-# Declare association tables after all models
+
 peak_peaklist_association = Table(
     'peak_peaklist_association',
     Base.metadata,
@@ -49,5 +49,4 @@ user_peaklist_association = Table(
     Column('peaklist_id', Integer, ForeignKey('peak_list.id'))
 )
 
-# Create tables
 Base.metadata.create_all(engine)
