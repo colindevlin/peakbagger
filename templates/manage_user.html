@@ -8,15 +8,21 @@
     <h2>Lists You Are Bagging:</h2>
     {% if user_lists %}
     {% for list in user_lists %}
-    <form action="{{ url_for('manage_individual_list', list_id=peak_list.id) }}" method="GET">
-        <button type="submit">Manage</button>
+    <form action="{{ url_for('manage_list', list_id=list.id) }}" method="GET">
+        <div class="container m-2">
+            <div class="btn-group btn-group-sm" role="group" aria-label="">
+                <input type="checkbox" class="btn-check" name="view_list" value="{{ list.id }}" id="btncheck{{ list.id }}" autocomplete="off" {% if list in user_lists %}checked{% endif %}>
+                <label class="btn btn-outline-primary" for="btncheck{{ list.id }}">
+                    View
+                </label>
+            </div>
+            {{ list.name }}
+        </div>
     </form>
-
     {% endfor %}
     {% else %}
     <p>You are not subscribed to any lists yet.</p>
     {% endif %}
-
 
     <form method="POST">
         <h2>All Lists:</h2>
