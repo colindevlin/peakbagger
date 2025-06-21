@@ -31,6 +31,7 @@ class Peak(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     range = Column(String)
+    complete = Column(Boolean)
 
     peak_lists = relationship('PeakList', secondary='peak_peaklist_association', back_populates='peaks')
 

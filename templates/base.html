@@ -15,12 +15,6 @@
 
 </head>
 <body>
-{% if user %}
-    <p>Logged in as {{ user.username }} | <a href="{{ url_for('logout') }}">Logout</a></p>
-{% else %}
-    <a href="{{ url_for('login', user_id=1) }}">Login as ColinCool</a>
-    <a href="{{ url_for('login', user_id=2) }}">Login as LameJane</a>
-{% endif %}
 
 {% block content %}
 

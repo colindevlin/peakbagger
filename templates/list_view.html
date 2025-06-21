@@ -4,33 +4,39 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-2">
-    <div class="dropdown m-2">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="peak_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            Select a Peak List
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="peak_dropdown">
-            {% for peak_list in all_peaks_lists %}
-            <li>
-                <a class="dropdown-item" href="{{ url_for('list_view', list_id=peak_list.id) }}">{{ peak_list.name }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
 
-<div class="container mt-2">
-    {{ peak_list.name }}:
-    <ul>
-        {% for peak in peak_list.peaks %}
+<div class=" container dropdown m-2">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="peak_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        Select a Peak List
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="peak_dropdown">
+        {% for peak_list in all_peaks_lists %}
         <li>
-            {{ peak.name }}
+            <a class="dropdown-item" href="{{ url_for('list_view', list_id=peak_list.id) }}">{{ peak_list.name }}</a>
         </li>
         {% endfor %}
     </ul>
 </div>
 
-<div class="container">
-    <a class="btn btn-primary" href="/"> Return </a>
+
+<div class="container mt-2">
+    <a class="btn btn-primary mb-1" href="/"> Return </a>
+    <form action="{{ url_for('update_user_data') }}" method="POST">
+        <input type="hidden" name="list_id" value="{{ peak_list.id }}">
+        <button type="submit" class="btn btn-success mb-2">Mark as Complete</button>
+        <div class="container">
+            {{ peak_list.name }}:
+            <ul>
+                {% for peak in peak_list.peaks %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="{{ peak.id }}" name="peaks" id="peak-{{ peak.id }}" {% if peak.complete %} checked {% endif %}>
+                    <label class="form-check-label" for="peak-{{ peak.id }}">
+                        {{ peak.name }}
+                    </label>
+                </div>
+                {% endfor %}
+            </ul>
+        </div>
+    </form>
 </div>
 {% endblock %}
